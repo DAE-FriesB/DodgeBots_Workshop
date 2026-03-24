@@ -1,0 +1,35 @@
+Button {
+    background-color: rgb(200, 100, 180);
+    border-top-color: rgb(150, 200, 220);
+    border-top-width: 6px;
+    border-right-width: 6px;
+    border-bottom-width: 6px;
+    border-left-width: 6px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-left-color: rgb(150, 200, 220);
+    border-right-color: rgb(200, 150, 100);
+    border-bottom-color: rgb(200, 150, 100);
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    font-size: 26px;
+}
+
+
+
+Button:hover {
+    background-color: rgb(220, 130, 200);
+    border-top-color: rgb(180, 220, 240);
+    border-right-color: rgb(220, 180, 140);
+    border-bottom-color: rgb(220, 180, 140);
+}
+
+Button:active {
+    background-color: rgb(180, 80, 160);
+    border-top-color: rgb(200, 150, 100);
+    border-right-color: rgb(150, 200, 220);
+    border-bottom-color: rgb(150, 200, 220);
+    border-left-color: rgb(200, 150, 100);
+}
