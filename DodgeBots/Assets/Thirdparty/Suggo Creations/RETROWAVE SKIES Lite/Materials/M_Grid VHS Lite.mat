@@ -82,7 +82,7 @@ Material:
     - _ZWriteControl: 0
     m_Colors:
     - _GridColor: {r: 0.36895007, g: 1.0914494, b: 1.4022043, a: 1}
-    - _GridSpeed: {r: 0.01, g: 0.01, b: 0, a: 0}
+    - _GridSpeed: {r: 0, g: -0.1, b: 0, a: 0}
     - _GroundColor: {r: 0.4233692, g: 0, b: 0.4264151, a: 1}
     - _Parallax_Color: {r: 0, g: 2.101961, b: 2.9960785, a: 1}
     - _Tiling: {r: 0.05, g: 0.05, b: 0, a: 0}
