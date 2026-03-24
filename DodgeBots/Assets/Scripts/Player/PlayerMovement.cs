@@ -20,7 +20,8 @@ public class PlayerMovement : MonoBehaviour
 	private float _jumpSpeed = 10f;
 	[SerializeField]
 	private float _rotationSpeed = 360f;
-
+	[SerializeField]
+	private float _gravityMultiplier = 1f;
 
 	//Private fields
 	private float _verticalSpeed = 0f;
@@ -58,6 +59,8 @@ public class PlayerMovement : MonoBehaviour
 			_moveDirection = moveDirection;
 		}
 
+
+
 		// Handle Jump
 		if (_jumpPressed)
 		{
@@ -79,7 +82,7 @@ public class PlayerMovement : MonoBehaviour
 
 	void ApplyGravity()
 	{
-		_verticalSpeed += Time.fixedDeltaTime * Physics.gravity.y;
+		_verticalSpeed += Time.fixedDeltaTime * Physics.gravity.y * _gravityMultiplier;
 		_characterControl.Move(_verticalSpeed * Time.fixedDeltaTime * Vector3.up);
 		if (_characterControl.isGrounded)
 		{

@@ -1,7 +1,4 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/styling.uss?fileID=7433441132597879392&amp;guid=df3b7c715f0880d41af7572dfb88214c&amp;type=3#styling"/>
-    <ui:VisualElement picking-mode="Ignore" style="flex-grow: 1; position: absolute; top: 0; left: 0;">
-        <ui:Button text="Join as Host" name="JoinHostBtn"/>
-        <ui:Button text="Join as Client" name="JoinClientBtn"/>
-    </ui:VisualElement>
+    <ui:Button text="Spawn Here!" style="width: 100%; height: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; min-width: 200px; min-height: 50px;"/>
 </ui:UXML>

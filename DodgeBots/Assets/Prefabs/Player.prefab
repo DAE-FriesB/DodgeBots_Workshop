@@ -1738,9 +1738,10 @@ MonoBehaviour:
   _characterControl: {fileID: 3275139367582947991}
   _moveAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   _jumpAction: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  _moveSpeed: 7
+  _moveSpeed: 5
   _jumpSpeed: 10
   _rotationSpeed: 360
+  _gravityMultiplier: 1.5
 --- !u!114 &6219233254337398678
 MonoBehaviour:
   m_ObjectHideFlags: 0
