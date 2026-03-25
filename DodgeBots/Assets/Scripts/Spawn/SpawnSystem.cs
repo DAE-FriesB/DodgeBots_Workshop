@@ -1,6 +1,8 @@
+using System;
+using Unity.Netcode;
 using UnityEngine;
 
-public class SpawnSystem : MonoBehaviour //NetworkBehaviour
+public class SpawnSystem : NetworkBehaviour
 {
 	[SerializeField]
 	private SpawnLocation[] _spawnLocations;
@@ -19,10 +21,10 @@ public class SpawnSystem : MonoBehaviour //NetworkBehaviour
 		SetLocationsVisible(false);
 	}
 
-	//public override void OnNetworkSpawn()
-	//{
-	//	SetLocationsVisible(true);
-	//}
+	public override void OnNetworkSpawn()
+	{
+		SetLocationsVisible(true);
+	}
 
 	public void SetLocationsVisible(bool visible)
 	{
@@ -38,19 +40,20 @@ public class SpawnSystem : MonoBehaviour //NetworkBehaviour
 		//find spawn location
 		SpawnLocation clickedLocation = sender as SpawnLocation;
 
-		//int spawnLocationIndex = Array.FindIndex(_spawnLocations, (s) => s == clickedLocation);
+		int spawnLocationIndex = Array.FindIndex(_spawnLocations, (s) => s == clickedLocation);
 
-		Transform spawnLocation = clickedLocation.transform;
-		GameObject instance = Instantiate(_playerAvatarPrefab, spawnLocation.position, spawnLocation.rotation);
+		SpawnPlayerRpc(spawnLocationIndex, NetworkManager.Singleton.LocalClientId);
 
 		//hide spawn locations
 		SetLocationsVisible(false);
 	}
 
-	//[Rpc(SendTo.Server)]
+	[Rpc(SendTo.Server)]
 	void SpawnPlayerRpc(int spawnIndex, ulong clientId)
 	{
 		Transform spawnLocation = _spawnLocations[spawnIndex].transform;
-		//TODO: spawn with ownership
+
+		GameObject instance = Instantiate(_playerAvatarPrefab, spawnLocation.position, spawnLocation.rotation);
+		instance.GetComponent<NetworkObject>().SpawnWithOwnership(clientId, true);
 	}
 }

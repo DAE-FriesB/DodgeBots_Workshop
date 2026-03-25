@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -16,7 +17,7 @@ public class JoinUI : MonoBehaviour
 	private void JoinHostButton_clicked()
 	{
 		//TODO: Join as Host
-
+		NetworkManager.Singleton.StartHost();
 
 		//Hide UI
 		gameObject.SetActive(false);
@@ -25,7 +26,7 @@ public class JoinUI : MonoBehaviour
 	private void JoinClientButton_clicked()
 	{
 		//TODO: Join as Client
-
+		NetworkManager.Singleton.StartClient();
 
 		//Hide UI
 		gameObject.SetActive(false);

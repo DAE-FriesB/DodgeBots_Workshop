@@ -23,6 +23,10 @@ public class PlayerAnimations : MonoBehaviour
 	[SerializeField]
 	private PlayerMovement _move;
 
+	[SerializeField]
+	private PickupBall _ballPickup;
+
+
 	private void Start()
 	{
 		_prevPosition = transform.position;
@@ -42,6 +46,6 @@ public class PlayerAnimations : MonoBehaviour
 
 		_prevPosition = transform.position;
 
-		//_animator.SetBool(_grabParameter, _throwScript.HasBall);
+		_animator.SetBool(_grabParameter, _ballPickup.GrabbedBall != null);
 	}
 }

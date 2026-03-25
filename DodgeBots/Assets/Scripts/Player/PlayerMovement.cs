@@ -1,7 +1,8 @@
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : NetworkBehaviour
 {
 	[SerializeField]
 	private CharacterController _characterControl;
@@ -29,55 +30,96 @@ public class PlayerMovement : MonoBehaviour
 	private Vector3 _moveDirection;
 
 
-	public void Start()
+	public void Awake()
 	{
 		_moveDirection = transform.forward;
-		_moveAction.action.Enable();
-		_jumpAction.action.Enable();
 
-		_jumpAction.action.performed += Jump_Performed;
+	}
+
+
+
+	public override void OnNetworkSpawn()
+	{
+		if (IsOwner)
+		{
+			_moveAction.action.Enable();
+			_jumpAction.action.Enable();
+			_jumpAction.action.performed += Jump_Performed;
+
+
+			GetComponent<PlayerCameraAttach>().enabled = true;
+		}
+
+		if (!IsOwnedByServer)
+		{
+			GetComponent<PlayerTeamColor>().SetPlayerColor(PlayerTeamColor.TeamColor.Red);
+		}
+	}
+
+
+	public override void OnNetworkDespawn()
+	{
+		if (IsOwner)
+		{
+			_jumpAction.action.performed -= Jump_Performed;
+		}
+
 	}
 
 	private void Jump_Performed(InputAction.CallbackContext obj)
 	{
-		_jumpPressed = true;
+		RequestJumpRpc();
 	}
 
 	private void FixedUpdate()
 	{
-		// Gravity
-		ApplyGravity();
-
-		// Get Move input
-		Vector2 moveInput = _moveAction.action.ReadValue<Vector2>();
-
-		// Translate input to movement
-		if (moveInput.magnitude > 0f)
+		if (IsOwner)
 		{
-			Vector3 moveDirection = new Vector3(moveInput.x, 0f, moveInput.y);
-			_characterControl.Move(moveDirection * _moveSpeed * Time.deltaTime);
-			_moveDirection = moveDirection;
-		}
+			// Get Move input
+			Vector2 moveInput = _moveAction.action.ReadValue<Vector2>();
 
-
-
-		// Handle Jump
-		if (_jumpPressed)
-		{
-			if (_characterControl.isGrounded)
+			// Translate input to movement
+			if (moveInput.magnitude > 0f)
 			{
-				_verticalSpeed = _jumpSpeed;
+				RequestMoveRpc(moveInput);
 			}
-			_jumpPressed = false;
+
 		}
 
+		if (IsServer)
+		{
+			// Gravity
+			ApplyGravity();
 
-		// Auto rotate
-		Quaternion targetRotation = Quaternion.LookRotation(_moveDirection);
-		transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.fixedDeltaTime);
+			// Handle Jump
+			if (_jumpPressed)
+			{
+				if (_characterControl.isGrounded)
+				{
+					_verticalSpeed = _jumpSpeed;
+				}
+				_jumpPressed = false;
+			}
 
+			// Auto rotate
+			Quaternion targetRotation = Quaternion.LookRotation(_moveDirection);
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.fixedDeltaTime);
+		}
 	}
 
+	[Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+	void RequestMoveRpc(Vector2 moveInput)
+	{
+		Vector3 moveDirection = new Vector3(moveInput.x, 0f, moveInput.y);
+		_characterControl.Move(moveDirection * _moveSpeed * Time.fixedDeltaTime);
+		_moveDirection = moveDirection;
+	}
+
+	[Rpc(SendTo.Server, InvokePermission = RpcInvokePermission.Owner)]
+	void RequestJumpRpc()
+	{
+		_jumpPressed = true;
+	}
 
 
 	void ApplyGravity()
